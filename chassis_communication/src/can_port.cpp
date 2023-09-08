@@ -9,7 +9,7 @@
       can_->Close();
   }
 
-  bool ChassisCanPort::Connect(std::string can_name) 
+  bool ChassisCanPort::ConnectGet(std::string can_name) 
   {
     can_ = std::make_shared<AsyncCAN>(can_name); // 设置底层接口对象
     can_->SetReceiveCallback(std::bind(&ChassisCanPort::ParseCANFrame, this, std::placeholders::_1)); // 设置底层接口回调函数
@@ -27,6 +27,7 @@
       can_frame frame;
       if (protocolparser.EncodeMessage(&msg, &frame)) 
         can_->SendFrame(frame);
+        std::cout<<("Enable is Send Ok")<<std::endl;
     }
   }
 
@@ -63,7 +64,6 @@
       default:
         break;
     }
-    
   }
 
 CoreStateMsgGroup ChassisCanPort::GetCoreStateToROS()

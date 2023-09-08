@@ -33,10 +33,11 @@ int main(int argc, char **argv)
   private_node.param<std::string>("brake_topic_name", messenger.brake_topic_name_, "brake");
   private_node.param<std::string>("chassis_heart_topic_name", messenger.chassis_heart_topic_name_, std::string("chassis"));                             
   private_node.param<std::string>("chassis_status_topic_name", messenger.chassis_status_topic_name_, std::string("chassis_status"));                             
+  private_node.param<std::string>("chassis_uwb_enable_topic_name", messenger.chassis_uwb_enable_topic_name_, std::string("chassis_uwb_enable"));                             
   
   if (port_name.find("can") != std::string::npos) 
   {
-    chassiscanport.Connect(port_name); //接收CAN上报数据并解包，按照协议分类处理数据，等待使用
+    chassiscanport.ConnectGet(port_name); //接收CAN上报数据并解包，按照协议分类处理数据，等待使用
     chassiscanport.EnableCommandedMode(); //根据协议向0x421下发CAN使能，允许通过CAN进行通讯控制接入
     ROS_INFO("已经接收CAN上报数据, 并下发CAN使能。");
   } 
@@ -47,7 +48,11 @@ int main(int argc, char **argv)
 
   //当前：订阅到cmd速度信息后回调处理为can并下发can通信
   messenger.GetCanName(port_name);
-  messenger.SetupSubPub(messenger.cmd_topic_name_, messenger.brake_topic_name_, messenger.chassis_heart_topic_name_,messenger.chassis_status_topic_name_); 
+  messenger.SetupSubPub(messenger.cmd_topic_name_, 
+                                                        messenger.brake_topic_name_, 
+                                                        messenger.chassis_heart_topic_name_,
+                                                        messenger.chassis_status_topic_name_,
+                                                        messenger.chassis_uwb_enable_topic_name_); 
 
   ros::Rate rate(50);
 

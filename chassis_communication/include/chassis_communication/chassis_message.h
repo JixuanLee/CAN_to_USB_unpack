@@ -39,21 +39,29 @@ typedef struct {
 /**************** 反馈上报 messages *****************/
 
 typedef struct {
-  ChassisVehicleState vehicle_state;
-  ChassisControlMode control_mode;
-  float battery_voltage;
-  uint16_t error_code;
-} SystemStateMessage;
-
-typedef struct {
-  uint8_t res1;
+  // ChassisVehicleState vehicle_state;
+  // ChassisControlMode control_mode;
+  // float battery_voltage;
+  // uint16_t error_code;
+  uint8_t uwb_enable;
   uint8_t res2;
   uint8_t res3;
   uint8_t res4;
   uint8_t res5;
   uint8_t res6;
   uint8_t res7;
-  uint8_t count;
+  uint8_t res8;
+} SystemStateMessage;
+
+typedef struct {
+  uint8_t uwb_enable;
+  uint8_t res2;
+  uint8_t res3;
+  uint8_t res4;
+  uint8_t res5;
+  uint8_t res6;
+  uint8_t res7;
+  uint8_t res8;
   } SystemStateFrame;
 
 typedef struct {
@@ -85,11 +93,11 @@ typedef struct {
 typedef enum {
   ChassisMsgUnkonwn = 0x00,
 
-  ChassisMsgControlModeConfig,
+  ChassisMsgControlModeConfig, // CAN enable
 
-  ChassisMsgMotionCommand,
+  ChassisMsgMotionCommand, // Motion to vel
 
-  ChassisMsgSystemState,
+  ChassisMsgSystemState, // some enable from vel
   ChassisMsgMotionState
 } MsgType;
 

@@ -16,17 +16,16 @@
     switch (rx_frame->can_id) {
 
       case ((uint32_t)0x211): { //0x211
-        // msg->type = ChassisMsgSystemState;
+        msg->type = ChassisMsgSystemState;
         SystemStateFrame *frame = (SystemStateFrame *)(rx_frame->data);
-        // msg->body.system_state_msg.vehicle_state = frame->vehicle_state;
-        // msg->body.system_state_msg.control_mode = frame->control_mode;
-        // msg->body.system_state_msg.battery_voltage =
-        //     (int16_t)((uint16_t)(frame->battery_voltage.low_byte) |
-        //               (uint16_t)(frame->battery_voltage.high_byte) << 8) *
-        //     0.1;
-        // msg->body.system_state_msg.error_code =
-        //     (uint16_t)(frame->error_code.low_byte) |
-        //     (uint16_t)(frame->error_code.high_byte) << 8;
+        msg->body.system_state_msg.uwb_enable = frame->uwb_enable;
+        msg->body.system_state_msg.res2 = frame->res2;
+        msg->body.system_state_msg.res3 = frame->res3;
+        msg->body.system_state_msg.res4 = frame->res4;
+        msg->body.system_state_msg.res5 = frame->res5;
+        msg->body.system_state_msg.res6 = frame->res6;
+        msg->body.system_state_msg.res7 = frame->res7;
+        msg->body.system_state_msg.res8 = frame->res8;
         break;
       }
       case ((uint32_t)0x221):  //0x221
@@ -68,7 +67,7 @@
     {
         case ChassisMsgControlModeConfig: 
         {
-        tx_frame->can_id = ((uint32_t)0x421); //0x421
+        tx_frame->can_id = ((uint32_t)0x41); //0x421
         tx_frame->can_dlc = 1;
         ControlModeConfigFrame frame;
         frame.can_enable_flag = msg->body.control_mode_config_msg.mode;

@@ -19,13 +19,18 @@ public:
     std::string brake_topic_name_; 
     std::string chassis_heart_topic_name_;
     std::string chassis_status_topic_name_;
+    std::string chassis_uwb_enable_topic_name_;
 
     bool brake_flag_twistcmdcallback = false;
     bool nerve_brake = true;
     bool send_flag = true;
     bool receive_flag = true; //暂未使用到
 
-    void SetupSubPub(std::string cmd_topic_name, std::string brake_topic_name, std::string chassis_heart_topic_name, const std::string chassis_status_topic_name);
+    void SetupSubPub(std::string cmd_topic_name, 
+                                            std::string brake_topic_name, 
+                                            std::string chassis_heart_topic_name, 
+                                            std::string chassis_status_topic_name,
+                                            std::string chassis_uwb_enable_topic_name);
     void PublishStateToROS();
     void GetCanName(const std::string canname);
     void SendMotionCommand(double linear, double angular, bool brake_flag_send);
@@ -41,6 +46,7 @@ private:
 
     ros::Publisher heart_publisher_;
     ros::Publisher status_publisher_;
+    ros::Publisher uwb_enable_publisher_;
     ros::Subscriber motion_cmd_subscriber_;
     ros::Subscriber brake_cmd_subscriber_;
     tf2_ros::TransformBroadcaster tf_broadcaster_;

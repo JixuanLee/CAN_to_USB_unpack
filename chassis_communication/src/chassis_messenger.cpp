@@ -15,11 +15,16 @@
     can_ = std::make_shared<AsyncCAN>(canname); // 设置底层接口对象
   }
 
-  void ChassisBaseNode::SetupSubPub(const std::string cmd_topic_name, const std::string brake_topic_name, const std::string chassis_heart_topic_name, const std::string chassis_status_topic_name)//ljx
+  void ChassisBaseNode::SetupSubPub(const std::string cmd_topic_name, 
+                                                                                  const std::string brake_topic_name, 
+                                                                                  const std::string chassis_heart_topic_name, 
+                                                                                  const std::string chassis_status_topic_name, 
+                                                                                  const std::string chassis_uwb_enable_topic_name)//ljx
   {
 
     heart_publisher_ = nh_->advertise<std_msgs::Bool>(chassis_heart_topic_name, 50);
     status_publisher_ = nh_->advertise<geometry_msgs::Twist>(chassis_status_topic_name, 10); //车辆底盘can上报的速度、车辆状态、控制模式等信息
+    uwb_enable_publisher_ = nh_->advertise<std_msgs::Bool>(chassis_uwb_enable_topic_name, 10); //车辆底盘can上报的UWB使能状态
 
     brake_cmd_subscriber_ = nh_->subscribe(brake_topic_name, 5, &ChassisBaseNode::BrakeCmdCallback, this);
     motion_cmd_subscriber_ = nh_->subscribe<geometry_msgs::Twist>(cmd_topic_name, 5, &ChassisBaseNode::TwistCmdCallback, this);
@@ -82,6 +87,11 @@
     status_msg_to_ros.angular.z = core_state.motion_state.angular_velocity;
     status_publisher_.publish(status_msg_to_ros);
 
+    std_msgs::Bool uwb_enable;
+    uwb_enable.data = false;
+    uwb_enable.data = core_state.system_state.uwb_enable;
+    uwb_enable_publisher_.publish(uwb_enable);
+
     // 发送心跳标志
     PublishHeartToROS(nerve_brake);
 
@@ -101,7 +111,10 @@
 
       can_frame frame;
       if (protocolparser_.EncodeMessage(&msg, &frame)) 
+      {
+        ROS_INFO("Ready to send motion now.");
         can_->SendFrame(frame);
+      }
       ROS_INFO("test_cmd_twist has send to CAN"); // 仅供测试
       send_flag = true;
     }

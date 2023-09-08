@@ -22,7 +22,7 @@ public:
   //bind: 这个方法用于解析从CAN设备接收到的CAN帧，并将它们传递给占位符_1
   //ConnectPort函数会将can_name参数和一个回调函数传递给TCP/IP套接字的异步读取操作。
   //当socket接收到一个CAN帧时，就会调用回调函数，并将接收到的CAN帧作为参数传递给该函数
-  bool Connect(std::string can_name) ;
+  bool ConnectGet(std::string can_name) ;
 
   void EnableCommandedMode();
 

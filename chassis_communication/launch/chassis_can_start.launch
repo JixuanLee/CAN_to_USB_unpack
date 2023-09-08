@@ -6,6 +6,7 @@
     <arg name="brake_topic_name" default="/brake" /><!--修改brake话题，实时获取刹车信息 ljx-->
     <arg name="chassis_heart_topic_name" default="/chassis" />
     <arg name="chassis_status_topic_name" default="/chassis_status" />
+    <arg name="chassis_uwb_enable_topic_name" default="/chassis_uwb_enable" />
 
     <node name="chassis_main_node" pkg="chassis_communication" type="chassis_communication" output="screen">
 
@@ -14,6 +15,7 @@
         <param name="brake_topic_name" type="string" value="$(arg brake_topic_name)" />
         <param name="chassis_heart_topic_name" type="string" value="$(arg chassis_heart_topic_name)" />
         <param name="chassis_status_topic_name" type="string" value="$(arg chassis_status_topic_name)" />
+        <param name="chassis_uwb_enable_topic_name" type="string" value="$(arg chassis_uwb_enable_topic_name)" />
         
     </node>
 
